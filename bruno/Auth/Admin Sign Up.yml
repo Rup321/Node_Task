@@ -1,0 +1,25 @@
+info:
+  name: Admin Sign Up
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/auth/signup"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "yash",
+        "email": "yasah@yopmail.com",
+        "mobileNumber": "7507405875",
+        "password": "pass@123",
+        "gender": "male"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

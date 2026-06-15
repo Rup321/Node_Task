@@ -1,0 +1,23 @@
+info:
+  name: Create A Brand
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/brand"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "second brand",
+        "price": 10,
+        "detail": "this is the second brand"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

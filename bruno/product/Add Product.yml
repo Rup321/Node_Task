@@ -1,0 +1,36 @@
+info:
+  name: Add Product
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/product"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "first product 5",
+        "description": "asdfghjklzxcvbnm,qwertyuioyhnhnkjc",
+        "brands" : [
+          {
+            "name": "first brand 1",
+            "detail": "this is the first brand",
+            "file_id": 7,
+            "price": 10
+          },
+          {
+            "name": "second brand 1",
+            "detail": "this is the second brand",
+            "file_id": 9,
+            "price": 12
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

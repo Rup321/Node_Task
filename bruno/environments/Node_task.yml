@@ -1,0 +1,4 @@
+name: Node_task
+variables:
+  - name: baseUrl
+    value: http://localhost:3000

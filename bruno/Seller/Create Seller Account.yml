@@ -1,0 +1,36 @@
+info:
+  name: Create Seller Account
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/auth/account/seller"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "seller3",
+        "email": "seller3@yopmail.com",
+        "password": "pass@seller",
+        "mobileNumber": "1234567892",
+        "countryId": 1,
+        "gender": "female",
+        "stateId": 1,
+        "skills" : ["dance", "fight", "singing"],
+        "fileId": 7
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: baseUrl
+      value: http://localhost:3000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: This request retrieves a list of users from the JSONPlaceholder API.

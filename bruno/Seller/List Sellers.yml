@@ -1,0 +1,34 @@
+info:
+  name: List Sellers
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/seller?search=seller2"
+  params:
+    - name: search
+      value: seller2
+      type: query
+    - name: page
+      value: ""
+      type: query
+      disabled: true
+    - name: limit
+      value: "1"
+      type: query
+      disabled: true
+  auth: inherit
+
+runtime:
+  variables:
+    - name: baseUrl
+      value: http://localhost:3000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: This request retrieves a list of users from the JSONPlaceholder API.
