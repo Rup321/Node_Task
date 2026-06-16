@@ -21,10 +21,10 @@ export const CONSTANT = {
     JWT_PATTERN: /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/,
   },
   DB: {
-    USERNAME: process.env.DB_USERNAME,
-    PASSWORD: process.env.DB_PASSWORD,
-    DATABASE: process.env.DB_DATABASE_NAME,
-    HOST: process.env.DB_HOST || '127.0.0.1',
+    USERNAME: process.env.DB_USERNAME || "root",
+    PASSWORD: process.env.DB_PASSWORD || "root",
+    DATABASE: process.env.DB_DATABASE_NAME || "node_task",
+    HOST: process.env.DB_HOST || "localhost"|| '127.0.0.1',
     PORT: parseInt(process.env.DB_PORT, 10) || 5432,
     DIALECT: process.env.DB_DIALECT || 'postgres',
     POOL: {
