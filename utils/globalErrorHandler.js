@@ -26,10 +26,17 @@ export function globalErrorHandler(err, req, res, next) {
   });
 
   const isCustomError = err instanceof CustomError;
-  const statusCode = err.status || err.statusCode || 500;
+  const isSequelizeValidationError = err.name === 'SequelizeValidationError';
+  const isSequelizeUniqueConstraintError = err.name === 'SequelizeUniqueConstraintError';
+
+  const statusCode = isSequelizeValidationError
+    ? 400
+    : isSequelizeUniqueConstraintError
+      ? 409
+      : err.status || err.statusCode || 500;
   const isProduction = process.env.NODE_ENV === 'production';
 
-  const responseMessage =
+  let responseMessage =
     isProduction && statusCode === 500 && !isCustomError
       ? 'An unexpected internal system error occurred. Please try again later.'
       : err.message;
@@ -37,9 +44,18 @@ export function globalErrorHandler(err, req, res, next) {
   const errorResponse = {
     success: false,
     statusCode: statusCode,
-    error: err.name || 'InternalServerError',
+    error: isSequelizeValidationError ? 'Validation Error' : err.name || 'InternalServerError',
     message: responseMessage,
   };
+
+  if (isSequelizeValidationError) {
+    errorResponse.message = err.errors?.map((validationError) => validationError.message).join(', ') || err.message;
+  }
+
+  if (isSequelizeUniqueConstraintError) {
+    errorResponse.error = 'Conflict';
+    errorResponse.message = err.errors?.map((validationError) => validationError.message).join(', ') || err.message;
+  }
 
   if (!isProduction && !isCustomError) {
     errorResponse.stack = err.stack;

@@ -16,7 +16,7 @@ export class ValidationError extends CustomError {
 
 export class NoDataFoundError extends CustomError {
   constructor(message = 'No Data Found') {
-    super(message, httpStatus.OK); // this should not be 404
+    super(message, httpStatus.NOT_FOUND);
   }
 }
 

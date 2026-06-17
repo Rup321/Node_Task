@@ -12,8 +12,8 @@ const router = Router();
 
 router.post(
   '/signup',
-  validate(authValidation.signUpSchema),
   singleFileUploadMiddleware(),
+  validate(authValidation.signUpSchema),
   errorWrapper(authController.signUp),
 );
 
@@ -21,8 +21,8 @@ router.post(
   '/account/seller',
   checkAuth,
   checkPermission({ allowedRoles: [user_roles.admin] }),
-  validate(authValidation.createSellerAccountSchema),
   singleFileUploadMiddleware(),
+  validate(authValidation.createSellerAccountSchema),
   errorWrapper(authController.createSellerAccount),
 );
 

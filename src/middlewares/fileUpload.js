@@ -30,41 +30,41 @@ function checkFileType(file, cb) {
 
 export const singleFileUploadMiddleware =
   (fieldName = 'file') =>
-  (req, res, next) => {
-    const upload = multer({
-      storage,
-      limits: { fileSize: allowedMaxSize * 1024 * 1024 },
-      fileFilter: (req, file, cb) => checkFileType(file, cb),
-    }).single(fieldName);
+    (req, res, next) => {
+      const upload = multer({
+        storage,
+        limits: { fileSize: allowedMaxSize * 1024 * 1024 },
+        fileFilter: (req, file, cb) => checkFileType(file, cb),
+      }).single(fieldName);
 
-    upload(req, res, (err) => {
-      if (err) {
-        return response.badRequest(res, { message: err.message });
-      }
+      upload(req, res, (err) => {
+        if (err) {
+          return response.badRequest(res, { message: err.message });
+        }
+        req.body = req.body || {};
+        if (!req.file) {
+          req.body.fileInfo = null;
+          return next();
+        }
 
-      if (!req.file) {
-        req.body.fileInfo = null;
+        const physicalDiskPath = req.file.path;
+        let staticUrlPath = physicalDiskPath.replace(/^public[\\/]?/, '').replace(/\\/g, '/');
+
+        // Ensure leading slash for absolute pathing from domain root
+        if (!staticUrlPath.startsWith('/')) {
+          staticUrlPath = '/' + staticUrlPath;
+        }
+
+        // Append cleanly to req.body so downstream controllers can use it
+        req.body.fileInfo = {
+          original_name: req.file.originalname,
+          file_name: req.file.filename,
+          file_path: physicalDiskPath, // 'public/uploads/123.png'
+          file_url: staticUrlPath, // '/uploads/123.png'
+          mime_type: req.file.mimetype,
+          size: req.file.size,
+        };
+
         return next();
-      }
-
-      const physicalDiskPath = req.file.path;
-      let staticUrlPath = physicalDiskPath.replace(/^public[\\/]?/, '').replace(/\\/g, '/');
-
-      // Ensure leading slash for absolute pathing from domain root
-      if (!staticUrlPath.startsWith('/')) {
-        staticUrlPath = '/' + staticUrlPath;
-      }
-
-      // Append cleanly to req.body so downstream controllers can use it
-      req.body.fileInfo = {
-        original_name: req.file.originalname,
-        file_name: req.file.filename,
-        file_path: physicalDiskPath, // 'public/uploads/123.png'
-        file_url: staticUrlPath, // '/uploads/123.png'
-        mime_type: req.file.mimetype,
-        size: req.file.size,
-      };
-
-      return next();
-    });
-  };
+      });
+    };

@@ -100,6 +100,9 @@ export async function singIn({ email, password, role }) {
 }
 
 export async function refreshAccessToken({ refreshToken }) {
+  if (!refreshToken) {
+    throw new BadRequestError("Refresh token is required")
+  }
   const userResult = await dbOperations.findOne({
     model: models.user,
     condition: { refresh_token: refreshToken },
@@ -124,6 +127,9 @@ export async function refreshAccessToken({ refreshToken }) {
 /* <---------------------------------- Utility Functions----------------------------------> */
 
 async function validateIsEmailTaken(email) {
+  if (!email) {
+    throw new BadRequestError("Email is Required")
+  }
   const isEmailTaken = await dbOperations.count({
     model: models.user,
     condition: { email },
@@ -135,6 +141,9 @@ async function validateIsEmailTaken(email) {
 }
 
 async function validateIsMobileNumberTaken(mobile_number) {
+  if (!mobile_number) {
+    throw new BadRequestError("Mobile no is required")
+  }
   const isEmailTaken = await dbOperations.count({
     model: models.user,
     condition: { mobile_number },
@@ -146,6 +155,9 @@ async function validateIsMobileNumberTaken(mobile_number) {
 }
 
 async function validateStateAndCountry({ stateId, countryId }) {
+  if (!stateId || !countryId) {
+    throw new BadRequestError("stateId and countryId are required")
+  }
   const isStateValid = await dbOperations.findByPk({
     model: models.state,
     id: stateId,
