@@ -1,8 +1,13 @@
+import { BadRequestError } from '../../utils/customErrors.js';
 import * as dbOperations from '../../utils/dbOperations.js';
 import * as commonFunctions from '../../utils/commonFunctions.js';
 import models from '../models/index.js';
 
 export async function singleFileUpload({ original_name, file_name, file_path, file_url, mime_type, size, userId }) {
+  if (!original_name || !file_name || !file_path || !file_url || !mime_type || !size || !userId) {
+    throw new BadRequestError('Uploaded file data is incomplete');
+  }
+
   const file = await dbOperations.create({
     model: models.file,
     body: {

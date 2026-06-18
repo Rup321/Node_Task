@@ -44,7 +44,13 @@ export function globalErrorHandler(err, req, res, next) {
   const errorResponse = {
     success: false,
     statusCode: statusCode,
-    error: isSequelizeValidationError ? 'Validation Error' : err.name || 'InternalServerError',
+    error: isSequelizeValidationError
+      ? 'Validation Error'
+      : isSequelizeUniqueConstraintError
+        ? 'Conflict'
+        : err.name === 'BadRequestError'
+          ? 'Bad Request'
+          : err.name || 'InternalServerError',
     message: responseMessage,
   };
 
